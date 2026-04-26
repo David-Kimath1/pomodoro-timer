@@ -91,15 +91,17 @@ git clone https://github.com/David-Kimath1/pomodoro-timer.git
 cd pomodoro-timer
 # Open index.html in your browser
 ```
-Browser Support
-Browser	Support
-Chrome	Yes
-Firefox	Yes
-Safari	Yes
-Edge	Yes
-Opera	Yes
-Mobile Chrome	Yes
-Mobile Safari	Yes
+
+| Browser         | Supported |
+| --------------- | --------- |
+| Chrome          | ✅         |
+| Firefox         | ✅         |
+| Safari          | ✅         |
+| Edge            | ✅         |
+| Opera           | ✅         |
+| Mobile Browsers | ✅         |
+
+
 Privacy
 All data is stored locally on your device. No data is sent to any server. Your tasks, statistics, and settings never leave your browser.
 
