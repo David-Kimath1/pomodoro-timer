@@ -1,0 +1,17 @@
+{
+  "name": "Pomodoro Timer",
+  "short_name": "Pomodoro",
+  "description": "Focus timer with tasks, statistics, and ambient sounds",
+  "start_url": "/pomodoro-timer/",
+  "scope": "/pomodoro-timer/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#a78bfa",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23a78bfa'/><text x='50' y='65' text-anchor='middle' font-size='40' fill='white'>P</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

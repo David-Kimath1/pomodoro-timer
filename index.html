@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#1a1a2e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <title>Pomodoro Timer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="manifest" href="manifest.json" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- Header -->
+      <header class="header">
+        <h1 class="title">
+          <i class="fa-solid fa-clock"></i>
+          Pomodoro
+        </h1>
+        <div class="header-actions">
+          <button class="icon-btn" id="themeBtn" title="Change theme">
+            <i class="fa-solid fa-palette"></i>
+          </button>
+          <button class="icon-btn" id="statsBtn" title="Statistics">
+            <i class="fa-solid fa-chart-simple"></i>
+          </button>
+          <button class="icon-btn" id="settingsBtn" title="Settings">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Session Tabs -->
+      <div class="session-tabs">
+        <button class="session-tab active" data-mode="focus">
+          <span class="tab-label">Focus</span>
+          <span class="tab-time" id="focusTimeLabel">25:00</span>
+        </button>
+        <button class="session-tab" data-mode="shortBreak">
+          <span class="tab-label">Short Break</span>
+          <span class="tab-time" id="shortBreakTimeLabel">5:00</span>
+        </button>
+        <button class="session-tab" data-mode="longBreak">
+          <span class="tab-label">Long Break</span>
+          <span class="tab-time" id="longBreakTimeLabel">15:00</span>
+        </button>
+      </div>
+
+    <!-- Quick Time Adjust -->
+    <div class="quick-adjust" id="quickAdjust">
+        <button class="adjust-btn" onclick="adjustTimer(-60)" title="-1 min">
+            <i class="fa-solid fa-minus"></i> 1m
+        </button>
+        <button class="adjust-btn" onclick="adjustTimer(-300)" title="-5 min">
+            <i class="fa-solid fa-minus"></i> 5m
+        </button>
+        <button class="adjust-btn" onclick="adjustTimer(60)" title="+1 min">
+            <i class="fa-solid fa-plus"></i> 1m
+        </button>
+        <button class="adjust-btn" onclick="adjustTimer(300)" title="+5 min">
+            <i class="fa-solid fa-plus"></i> 5m
+        </button>
+    </div>
+
+      <!-- Timer Display -->
+      <div class="timer-container">
+        <div class="progress-ring-container">
+          <svg class="progress-ring" viewBox="0 0 200 200">
+            <circle class="progress-ring-bg" cx="100" cy="100" r="90"></circle>
+            <circle
+              class="progress-ring-fill"
+              id="progressRing"
+              cx="100"
+              cy="100"
+              r="90"
+            ></circle>
+          </svg>
+          <div class="timer-display">
+            <span class="timer-text" id="timerText">25:00</span>
+            <span class="timer-mode" id="timerMode">Focus Time</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timer Controls -->
+      <div class="timer-controls">
+        <button class="control-btn skip-btn" id="skipBtn" title="Skip">
+          <i class="fa-solid fa-backward-step"></i>
+        </button>
+        <button class="control-btn play-btn" id="playBtn" title="Start">
+          <i class="fa-solid fa-play"></i>
+        </button>
+        <button class="control-btn reset-btn" id="resetBtn" title="Reset">
+          <i class="fa-solid fa-arrow-rotate-left"></i>
+        </button>
+      </div>
+
+      <!-- Session Progress -->
+      <div class="session-progress">
+        <span class="progress-label">Sessions</span>
+        <div class="progress-dots" id="progressDots">
+          <span class="dot completed"></span>
+          <span class="dot completed"></span>
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+        <span class="progress-text" id="progressText">2 of 6</span>
+      </div>
+
+      <!-- Current Task -->
+      <div class="current-task" id="currentTaskSection">
+        <span class="section-label">Current Task</span>
+        <div class="task-card active-task" id="activeTaskCard">
+          <div class="task-info">
+            <span class="task-name" id="activeTaskName">No task selected</span>
+            <span class="task-pomodoros" id="activeTaskPomodoros">0/0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task List -->
+      <div class="task-section">
+        <div class="section-header">
+          <span class="section-label">Today's Tasks</span>
+          <button class="add-task-btn" id="addTaskBtn">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+        <div class="task-list" id="taskList">
+          <div class="empty-state" id="taskEmptyState">
+            <p>No tasks yet. Add a task to get started.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Background Sounds -->
+      <div class="sounds-section">
+        <span class="section-label">Background Sounds</span>
+        <div class="sounds-list" id="soundsList">
+          <button class="sound-btn" data-sound="none">
+            <i class="fa-solid fa-volume-xmark"></i>
+            <span>None</span>
+          </button>
+          <button class="sound-btn" data-sound="lofi">
+            <i class="fa-solid fa-music"></i>
+            <span>Lo-fi</span>
+          </button>
+          <button class="sound-btn" data-sound="rain">
+            <i class="fa-solid fa-cloud-rain"></i>
+            <span>Rain</span>
+          </button>
+          <button class="sound-btn" data-sound="forest">
+            <i class="fa-solid fa-tree"></i>
+            <span>Forest</span>
+          </button>
+          <!-- <button class="sound-btn" data-sound="cafe">
+            <i class="fa-solid fa-mug-hot"></i>
+            <span>Cafe</span>
+          </button> -->
+        </div>
+        <div class="volume-control" id="volumeControl">
+          <i class="fa-solid fa-volume-low"></i>
+          <input type="range" id="volumeSlider" min="0" max="100" value="50" />
+          <i class="fa-solid fa-volume-high"></i>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>
+          Built by
+          <a href="https://github.com/David-Kimath1" target="_blank"
+            >David Kimathi</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://github.com/David-Kimath1/pomodoro-timer"
+            target="_blank"
+          >
+            <i class="fa-brands fa-github"></i> GitHub
+          </a>
+          <span>·</span>
+          <span>Free · No ads</span>
+        </p>
+      </footer>
+    </div>
+
+<!-- Task Modal -->
+<div class="modal hidden" id="taskModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="taskModalTitle">Add Task</h2>
+            <button class="close-modal" id="closeTaskModal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="taskId">
+            <div class="form-group">
+                <label>Task Name</label>
+                <input type="text" id="taskName" placeholder="What are you working on?" required>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select id="taskCategory" class="styled-select">
+                    <option value="work">Work</option>
+                    <option value="study">Study</option>
+                    <option value="personal">Personal</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Number of Sessions</label>
+                <p class="field-help">How many focus sessions do you plan for this task?</p>
+                <div class="session-counter">
+                    <button type="button" class="counter-btn" onclick="changePomodoroCount(-1)">-</button>
+                    <span class="counter-value" id="pomodoroCountDisplay">4</span>
+                    <button type="button" class="counter-btn" onclick="changePomodoroCount(1)">+</button>
+                </div>
+                <input type="hidden" id="taskPomodoros" value="4">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn secondary" id="cancelTaskBtn">Cancel</button>
+                <button type="submit" class="btn primary" id="saveTaskBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal hidden" id="settingsModal">
+    <div class="modal-content settings-content">
+        <div class="modal-header">
+            <h2>Settings</h2>
+            <button class="close-modal" id="closeSettingsModal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+
+            <!-- Timer Durations -->
+            <div class="settings-card">
+                <h3 class="settings-card-title">
+                    <i class="fa-solid fa-clock"></i> Timer Durations
+                </h3>
+                <div class="setting-row">
+                    <span class="setting-label">Focus Duration</span>
+                    <div class="time-input-group">
+                        <button class="time-btn" onclick="adjustTime('focusDuration', -5)">-5</button>
+                        <input type="number" id="focusDuration" value="25" min="1" max="120" class="time-input">
+                        <button class="time-btn" onclick="adjustTime('focusDuration', 5)">+5</button>
+                        <span class="time-unit">min</span>
+                    </div>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-label">Short Break</span>
+                    <div class="time-input-group">
+                        <button class="time-btn" onclick="adjustTime('shortBreakDuration', -1)">-1</button>
+                        <input type="number" id="shortBreakDuration" value="5" min="1" max="30" class="time-input">
+                        <button class="time-btn" onclick="adjustTime('shortBreakDuration', 1)">+1</button>
+                        <span class="time-unit">min</span>
+                    </div>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-label">Long Break</span>
+                    <div class="time-input-group">
+                        <button class="time-btn" onclick="adjustTime('longBreakDuration', -5)">-5</button>
+                        <input type="number" id="longBreakDuration" value="15" min="1" max="60" class="time-input">
+                        <button class="time-btn" onclick="adjustTime('longBreakDuration', 5)">+5</button>
+                        <span class="time-unit">min</span>
+                    </div>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-label">Sessions Before Long Break</span>
+                    <div class="time-input-group">
+                        <button class="time-btn" onclick="adjustTime('longBreakInterval', -1)">-1</button>
+                        <input type="number" id="longBreakInterval" value="4" min="1" max="10" class="time-input">
+                        <button class="time-btn" onclick="adjustTime('longBreakInterval', 1)">+1</button>
+                        <span class="time-unit">sessions</span>
+                    </div>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-label">Daily Goal</span>
+                    <div class="time-input-group">
+                        <button class="time-btn" onclick="adjustTime('dailyGoal', -1)">-1</button>
+                        <input type="number" id="dailyGoal" value="6" min="1" max="20" class="time-input">
+                        <button class="time-btn" onclick="adjustTime('dailyGoal', 1)">+1</button>
+                        <span class="time-unit">sessions</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auto Actions -->
+            <div class="settings-card">
+                <h3 class="settings-card-title">
+                    <i class="fa-solid fa-rotate"></i> Auto Actions
+                </h3>
+                <div class="setting-row">
+                    <span class="setting-label">Auto-start breaks</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoStartBreaks" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-label">Auto-start focus</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoStartFocus" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Sound -->
+            <div class="settings-card">
+                <h3 class="settings-card-title">
+                    <i class="fa-solid fa-volume-high"></i> Sound
+                </h3>
+                <div class="setting-row">
+                    <span class="setting-label">Alert Sound</span>
+                    <select id="alertSound" class="styled-select">
+                        <option value="bell">Bell</option>
+                        <option value="chime">Chime</option>
+                        <option value="digital">Digital</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Theme -->
+            <div class="settings-card">
+                <h3 class="settings-card-title">
+                    <i class="fa-solid fa-palette"></i> Theme
+                </h3>
+                <div class="theme-options-row" id="themeOptions">
+                    <button class="theme-dot active" data-theme="midnight" style="background: #1a1a2e;"
+                        title="Midnight"></button>
+                    <button class="theme-dot" data-theme="forest" style="background: #1a2e1a;" title="Forest"></button>
+                    <button class="theme-dot" data-theme="ocean" style="background: #1a2a3e;" title="Ocean"></button>
+                    <button class="theme-dot" data-theme="sunset" style="background: #2e1a1a;" title="Sunset"></button>
+                    <button class="theme-dot" data-theme="matcha" style="background: #1e2e1a;" title="Matcha"></button>
+                    <button class="theme-dot" data-theme="lavender" style="background: #2a1a3e;"
+                        title="Lavender"></button>
+                </div>
+            </div>
+
+            <!-- Data -->
+            <div class="settings-card">
+                <h3 class="settings-card-title">
+                    <i class="fa-solid fa-database"></i> Data Management
+                </h3>
+                <button class="btn secondary full-width" id="exportDataBtn">
+                    <i class="fa-solid fa-download"></i> Export Data
+                </button>
+                <button class="btn secondary full-width" id="importDataBtn">
+                    <i class="fa-solid fa-upload"></i> Import Data
+                </button>
+                <input type="file" id="importFileInput" accept=".json" hidden>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="settings-card danger-card">
+                <h3 class="settings-card-title" style="color: var(--danger);">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Danger Zone
+                </h3>
+                <button class="btn danger full-width" id="clearDataBtn">
+                    <i class="fa-solid fa-trash-can"></i> Clear All Data
+                </button>
+            </div>
+
+            <button class="btn primary full-width" id="saveSettingsBtn">Save Settings</button>
+        </div>
+    </div>
+</div>
+
+    <!-- Stats Modal -->
+    <div class="modal hidden" id="statsModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Statistics</h2>
+          <button class="close-modal" id="closeStatsModal">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-value" id="totalFocusTime">0h</span>
+              <span class="stat-label">Total Focus</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value" id="totalSessions">0</span>
+              <span class="stat-label">Sessions</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value" id="currentStreak">0</span>
+              <span class="stat-label">Day Streak</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value" id="bestStreak">0</span>
+              <span class="stat-label">Best Streak</span>
+            </div>
+          </div>
+
+          <h3>This Week</h3>
+          <div class="weekly-chart" id="weeklyChart"></div>
+
+          <h3>Task Breakdown</h3>
+          <div class="task-breakdown" id="taskBreakdown"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Theme Modal -->
+    <div class="modal hidden" id="themeModal">
+      <div class="modal-content theme-modal-content">
+        <div class="modal-header">
+          <h2>Choose Theme</h2>
+          <button class="close-modal" id="closeThemeModal">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="theme-grid">
+            <button class="theme-card" data-theme="midnight">
+              <div class="theme-preview" style="background: #1a1a2e"></div>
+              <span>Midnight</span>
+            </button>
+            <button class="theme-card" data-theme="forest">
+              <div class="theme-preview" style="background: #1a2e1a"></div>
+              <span>Forest</span>
+            </button>
+            <button class="theme-card" data-theme="ocean">
+              <div class="theme-preview" style="background: #1a2a3e"></div>
+              <span>Ocean</span>
+            </button>
+            <button class="theme-card" data-theme="sunset">
+              <div class="theme-preview" style="background: #2e1a1a"></div>
+              <span>Sunset</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast hidden" id="toast">
+      <i class="fa-solid fa-check-circle"></i>
+      <span id="toastMessage">Success</span>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/sounds.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/tasks.js"></script>
+    <script src="js/stats.js"></script>
+    <script src="js/timer.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
