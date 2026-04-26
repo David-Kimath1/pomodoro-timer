@@ -91,6 +91,7 @@ git clone https://github.com/David-Kimath1/pomodoro-timer.git
 cd pomodoro-timer
 # Open index.html in your browser
 ```
+## Browser Support
 
 | Browser         | Supported |
 | --------------- | --------- |
@@ -102,17 +103,16 @@ cd pomodoro-timer
 | Mobile Browsers | ✅         |
 
 
-Privacy
+## Privacy
 All data is stored locally on your device. No data is sent to any server. Your tasks, statistics, and settings never leave your browser.
 
-Author
-David Kimathi
+## Author
 
-GitHub: @David-Kimath1
+GitHub: https://github.com/David-Kimath1
 
-Project: Pomodoro Timer
+Github Project - https://github.com/David-Kimath1/pomodoro-timer
 
-Contributing
+## Contributing
 Contributions are welcome. Feel free to:
 
 Fork the repository
@@ -125,10 +125,10 @@ Push to the branch (git push origin feature/amazing-feature)
 
 Open a Pull Request
 
-License
+## License
 This project is licensed under the MIT License.
 
-Acknowledgments
+## Acknowledgments
 Icons by Font Awesome
 
 Font by Google Fonts
@@ -137,10 +137,9 @@ Sound effects by Mixkit
 
 Ambient sounds by Pixabay
 
-Support
+## Support
 If you find this useful, please give it a star on GitHub.
 
 Found a bug? Open an issue
 
-Made by David Kimathi
-
+# Made with Lots of Love by David Kimathi
