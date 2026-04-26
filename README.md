@@ -142,4 +142,4 @@ If you find this useful, please give it a star on GitHub.
 
 Found a bug? Open an issue
 
-# Made with Lots of Love by David Kimathi
+## Made with Lots of Love by David Kimathi
